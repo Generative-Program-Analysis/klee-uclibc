@@ -3,29 +3,20 @@ KLEE-uClibc
 
 [![Build Status](https://github.com/klee/klee-uclibc/workflows/CI/badge.svg)](https://github.com/klee/klee-uclibc/actions)
 
-This is a modified version version of uClibc for KLEE.  Please see README for information about uClibc.
+This is a modified version version of klee-uclibc.  Please see README for information about uClibc.
 
 To build uClibc for KLEE:
 
-1. Make sure `llvm-config` is in your PATH (or set using
-   `--with-llvm-config`).  The LLVM version used by `llvm-config`
+1. Use `--with-llvm-config` to set your llvm-config binary.  The LLVM version used by `llvm-config`
    should match the LLVM version used by the C LLVM Bitcode compiler
    you intend to use in step 2.
 
-2. Make sure you have one of the following C LLVM compilers
-  - `clang` built in the LLVM tool directory (`llvm-config --bindir`)
-  - `clang` in your `PATH`
+2. Use `--with-cc` to set your C LLVM Bitcode compiler.
 
-  The C compiler to be used will be looked for in the above order
-  with the first working compiler to be used.
-
-  Note you can also force a particular C compiler by using the CC
-  environment variable or by using `--with-cc` with the configure
-  script.
 
 3. Run the configure script.
 
-   ```$ ./configure --make-llvm-lib```
+   ```$ ./configure --make-llvm-lib --with-cc <PATH_TO_CLANG> --with-llvm-config <PATH_TO_LLVM_CONFIG_BINARY>```
 
    To see all options run
 
@@ -41,13 +32,6 @@ To build uClibc for KLEE:
 
 5. Compile
 
-   ```$ make```
+   ```$ make KLEE_CFLAGS="-fno-discard-value-names -mlong-double-64"```
 
-    You can also add optional flags by running adding
-    `KLEE_CFLAGS=...` to the end of the make line above. In
-    particular, to compile printf, which is excluded by default, use:
-
-    ```make KLEE_CFLAGS="-DKLEE_SYM_PRINTF"```
-
-    To compile in optimized mode use the `--enable-release`
-    flag. Warning things might break if you do this.
+    We use `KLEE_CFLAGS` here to add additional flags to disable fp80 and preserve variable name in generated IR.

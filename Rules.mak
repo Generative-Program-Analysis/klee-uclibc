@@ -412,7 +412,7 @@ endif
 LDFLAGS:=$(LDFLAGS_NOSTRIP) -z defs
 ifeq ($(DODEBUG),y)
 #CFLAGS += -g3
-CFLAGS += -O0 -g3
+CFLAGS += -O0 -Xclang -disable-O0-optnone
 else
 CFLAGS += $(OPTIMIZATION) $(XARCH_CFLAGS)
 endif
